@@ -1,0 +1,40 @@
+{@include "header"}
+<article class="main-content common-page clearfix">
+    <div id="post-content" class="post-content">
+        <div class="post-tags ">
+            {foreach $tags(key,value)}
+             <a href="/tags/{@value.name}"> {@value.name} </a>
+            {/foreach}
+        </div>
+
+        <div class="categorys-item">
+
+        <div class="common-title"> {#tag} </div>
+            {if $article}
+            <div class="post-lists">
+                <div class="post-lists-body">
+                    {foreach $article(key,value)}
+                    <div class="post-list-item">
+                        <div class="post-list-item-container ">
+                            <div class="item-label ">
+                                <div class="item-title">
+                                    <a href="/article/{@value.id}">{@value.title}</a>
+                                </div>
+                                <div class="item-meta clearfix">
+                                    <div class="item-meta-ico {@value.class}" style="background: url('{@$url}/static/img/bg-ico.png') no-repeat;background-size: 40px auto;"></div>
+                                    <div class="item-meta-cat"><a href="/cat/{@value.cat_id}">{@value.name}</a></div>
+                                    <div class="item-meta-date">发布于 {@value.create_time}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+            {else}
+                <div class='empty'>该标签还没有数据</div>
+            {/if}
+        </div>
+    </div>
+</article>
+{@include "footer"}

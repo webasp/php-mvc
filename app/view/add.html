@@ -1,0 +1,119 @@
+<link href="{@$url}/static/css/style.min.css" rel="stylesheet">
+<div class="main-content clearfix">
+    <div class="post-lists">
+        <form action="" id="ajaxForm" method="post">
+        <table style="display:inline-table;">
+            <thead>
+            <tr>
+                <td width="40%">
+                    <input type="text" id="title" class="title" name="title" value="">
+
+                    <select id="cat" name="cat">
+                        {foreach $cat(key,value)}
+                           <option value ="{@value.id}">{@value.name}</option>
+                        {/foreach}
+                    </select>
+
+                </td>
+                <td width="60%">
+                    <div class="tag-box">
+                        {foreach $tag(key,value)}
+                        <label> <input type="checkbox" name="tag" value="{@value.id}">{@value.name} </label>
+                        {/foreach}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding: 0">
+                    <textarea name="content" id="content"></textarea>
+                </td>
+            </tr>
+            </thead>
+        </table>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="{@$url}/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="{@$url}/static/js/mditor.js"></script>
+<style>
+    input.title,select{
+        display: block;
+        clear: both;
+        width: 100%;
+        line-height: 30px;
+        padding: 0 7px;
+        font-size: 14px;
+        height: 30px;
+        margin-bottom: 5px;
+        border-radius: 6px;
+    }
+
+    
+    input.title:focus,select:focus{
+        outline: 0;
+    }
+
+    .tag-box label{
+        border: 1px solid #ececec;
+        border-radius: 9px;
+        padding: 4px 8px;
+        margin: 2px;
+        background: #fff;
+        font-size: 12px;
+        float: left;
+    }
+
+    .tag-box label input{
+        vertical-align: text-top;
+        margin-right: 3px;
+    }
+
+</style>
+
+
+<script type="text/javascript">
+    new mditor(document.getElementById('content'));
+
+    $(window).keydown(function(e) {
+        if (e.keyCode == 83 && e.ctrlKey) {
+            save();
+            return false;
+        }
+    });
+
+
+    
+    function save() {
+        var title = $("#title").val();
+        var cat = $("#cat").val();
+        var tag =[];
+        var content = $("#content").val();
+        $('input[name="tag"]:checked').each(function(){
+            tag.push($(this).val());
+        });
+
+        $.ajax({
+            type: 'post',
+            url: '/admin/add',
+            data: {title:title,cat:cat,tag:tag,content:content},
+            success: function(data){
+                if(data.status === 1){
+                    $.diy_alert({"cont":data.info});
+                    setTimeout(function(){
+                        window.location.href='/admin';
+                    },1000);
+                }else{
+                    $.diy_alert({"cont":data.info});
+                }
+            }
+        });
+
+    }
+
+
+
+</script>
+
+
+
+

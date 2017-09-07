@@ -1,0 +1,32 @@
+{@include "header"}
+<div class="main-content common-page clearfix">
+    <div class="categorys-item">
+        <div class="common-title">
+            搜索：{#w}
+        </div>
+        <div class="post-lists">
+            <div class="post-lists-body">
+                {if $art}
+                {foreach $art(key,value)}
+                <div class="post-list-item">
+                    <div class="post-list-item-container ">
+                        <div class="item-label ">
+                            <div class="item-title">
+                                <a href="/article/{@value.id}">{@value.title}</a>
+                            </div>
+                            <div class="item-meta clearfix">
+                                <div class="item-meta-ico {@value.class}"></div>
+                                <div class="item-meta-date">发布于 {@value.create_time}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+                {else}
+                <div class='empty'> 没有找到你要的数据 </div>
+                {/if}
+            </div>
+        </div>
+    </div>
+</div>
+{@include "footer"}

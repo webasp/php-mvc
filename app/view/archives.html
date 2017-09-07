@@ -1,0 +1,31 @@
+{@include "header"}
+<div class="main-content archive-page clearfix">
+    <div class="categorys-item">
+        {if $data}
+        {foreach $data(keys,values)}
+        <div class="categorys-title">{@@keys}</div>
+        <div class="post-lists">
+            <div class="post-lists-body">
+                {foreach @values(key,value)}
+                <div class="post-list-item">
+                    <div class="post-list-item-container">
+                        <div class="item-label">
+                            <div class="item-title">
+                                <a href="/article/{@value.id}">{@value.title}</a>
+                            </div>
+                            <div class="item-meta clearfix">
+                                <div class="item-meta-date">发布于 {@value.create_time}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+            </div>
+        </div>
+        {/foreach}
+        {else}
+        <div class='empty'> 还没有发布文章 </div>
+        {/if}
+    </div>
+</div>
+{@include "footer"}

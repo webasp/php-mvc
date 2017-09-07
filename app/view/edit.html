@@ -1,0 +1,229 @@
+<link href="{@$url}/static/css/style.min.css" rel="stylesheet">
+<div class="main-content clearfix">
+    <div class="post-lists">
+        <form action="" id="ajaxForm" method="post">
+        <table style="display:inline-table;">
+            <thead>
+            <tr>
+                <td width="35%">
+
+                    <input type="text" id="title" class="title" name="title" value="{$art.title}">
+                    <select id="cat" name="cat">
+                        {foreach $cat(key,value)}
+                           <option value ="{@value.id}">{@value.name}</option>
+                        {/foreach}
+                    </select>
+                    <input type="text" class="title" name="thumb" id="Thumb" value="{$art.thumb}">
+                </td>
+                <td width="15%">
+                    <div class="upload-img">
+                        <span>  <?php echo $this->assign['art']['thumb'] ? '<img src="http://blog/static/Thumb/'.$this->assign['art']['thumb'].'">':'缩略图';?>  </span>
+                        <input id="fileUpload" type="file" name="img">
+                        <div class="progress">
+                            <span class="bar"></span><span class="percent">0%</span >
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="desc">
+                        <textarea name="desc" id="description">{$art.description}</textarea>
+                    </div>
+                    <div class="tag-box">
+                        {foreach $tag(key,value)}
+                        <label> <input type="checkbox" name="tag" id="tag{@value.id}" value="{@value.id}">{@value.name} </label>
+                        {/foreach}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding: 0">
+                    <textarea name="content" id="content">{$art.content}</textarea>
+                </td>
+            </tr>
+            </thead>
+        </table>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="{@$url}/static/js/jquery.min.js"></script>
+<script type="text/javascript" src="{@$url}/static/js/jquery.form.js"></script>
+<script type="text/javascript" src="{@$url}/static/js/mditor.js"></script>
+<style>
+    input.title,select{
+        display: block;
+        clear: both;
+        width: 100%;
+        line-height: 30px;
+        padding: 0 7px;
+        font-size: 14px;
+        height: 30px;
+        margin-bottom: 5px;
+        border-radius: 6px;
+    }
+
+    
+    input.title:focus,select:focus{
+        outline: 0;
+    }
+
+    .tag-box label{
+        border: 1px solid #ececec;
+        border-radius: 9px;
+        padding: 4px 8px;
+        margin: 2px;
+        background: #fff;
+        font-size: 12px;
+        float: left;
+    }
+
+    .tag-box label input{
+        vertical-align: text-top;
+        margin-right: 3px;
+    }
+
+
+    .upload-img{
+        position: relative;
+        overflow: hidden;
+        margin-right: 4px;
+        display: inline-block;
+        width: 100%;
+        height: 120px;
+        vertical-align: middle;
+        cursor: pointer;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        text-align: center;
+        line-height: 120px;
+        font-size: 21px;
+        color: #ccc;
+    }
+
+    .upload-img span img{
+        width: 100%;
+    }
+
+    .upload-img input {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        border: solid transparent;
+        opacity: 0;
+        filter: alpha(opacity=0);
+        cursor: pointer;
+        height: 120px;
+        width: 100%;
+    }
+    .progress {
+        position: relative;
+        margin-top: -20px;
+        width: 100%;
+        border-radius: 3px;
+        display: none;
+    }
+    .bar {
+        background-color: green;
+        display: block;
+        width: 0%;
+        height: 20px;
+        border-radius: 3px;
+    }
+    .percent {
+        position: absolute;
+        height: 20px;
+        display: inline-block;
+        top: 4px;
+        left: 2%;
+        color: #fff;
+        font-size: 12px;
+    }
+
+</style>
+
+
+<script type="text/javascript">
+    new mditor(document.getElementById('content'));
+
+    $(window).keydown(function(e) {
+        if (e.keyCode == 83 && e.ctrlKey) {
+            save();
+            return false;
+        }
+    });
+
+    setInterval("save()",60000);
+    
+    function save() {
+        var title = $("#title").val();
+        var cat = $("#cat").val();
+        var thumb = $("#Thumb").val();
+        var description = $("#description").val();
+        var tag =[];
+        var content = $("#content").val();
+        $('input[name="tag"]:checked').each(function(){
+            tag.push($(this).val());
+        });
+
+        $.ajax({
+            type: 'post',
+            url: '/admin/{$art.id}/edit',
+            data: {title:title,cat:cat,tag:tag,thumb:thumb,description:description,content:content},
+            success: function(data){
+                if(data.status === 1){
+                    $.diy_alert({"cont":data.info});
+                }else{
+                    $.diy_alert({"cont":data.info});
+                }
+            }
+        });
+
+    }
+
+
+    $("option[value='{$art.cat}']").attr("selected", true);
+
+    var tags = {#tags};
+    $.each(tags,function (v,id) {
+        $("#tag"+id).attr("checked",true);
+    });
+
+    var bar = $('.bar');
+    var percent = $('.percent');
+    var progress = $(".progress");
+    var files = $(".files");
+    var upload_img = $(".upload-img>span");
+    $("#fileUpload").wrap("<form id='Update' action='/update' method='post' enctype='multipart/form-data'></form>");
+    $("#fileUpload").change(function(){
+        $("#Update").ajaxSubmit({
+            dataType:  'json',
+            beforeSend: function() {
+                progress.show();
+                var percentVal = '0%';
+                bar.width(percentVal);
+                percent.html(percentVal);
+                upload_img.html("上传中...");
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                var percentVal = percentComplete + '%';
+                bar.width(percentVal);
+                percent.html(percentVal);
+            },
+            success: function(data) {
+                $("#Thumb").val(data);
+                data  = '{@$url}/static/Thumb/'+data;
+                upload_img.html("<img src='"+data+"'>");
+
+            },
+            error:function(xhr){
+                files.html(xhr.responseText);
+            }
+        });
+    });
+
+</script>
+
+
+
+

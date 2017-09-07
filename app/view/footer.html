@@ -1,0 +1,50 @@
+<footer id="footer" class="footer bg-white">
+    <div class="footer-social">
+        <div class="footer-container clearfix">
+            <div class="social-list">
+                {foreach $link(keys,value)}
+                <a class="social weibo" title="{@value.name}" target="blank" href="{@value.url}">{@value.name}</a>
+                {/foreach}
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-meta">
+        <div class="footer-container">
+            <div class="meta-item meta-copyright">
+                <div class="meta-copyright-info">
+                    <a href="" class="info-logo"></a>
+                    <div class="info-text">
+                        <p>Powered by 邓云</p>
+                        <p>&copy; 2017 <a href="http://dengyun.me">dengyun.me</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="meta-item meta-posts">
+                <h3 class="meta-title">最新文章</h3>
+
+                {foreach $top(keys,value)}
+                <li><a href="/article/{@value.id}" title="{@value.title}">{@value.title}</a></li>
+                {/foreach}
+            </div>
+            <div class="meta-item meta-comments">
+                <h3 class="meta-title">最新评论</h3>
+
+                <li><a href="">还没有评论</a></li>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="{@$url}/static/js/headroom.min.js"></script>
+<script src="{@$url}/static/js/highlight.min.js"></script>
+<script src="{@$url}/static/js/instantclick.min.js"></script>
+<script src="{@$url}/static/js/public.js"></script>
+
+<script data-no-instant>
+
+</script>
+
+</body>
+</html>

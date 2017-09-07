@@ -1,0 +1,52 @@
+<link href="{@$url}/static/css/style.min.css" rel="stylesheet">
+<script src="{@$url}/static/js/jquery.min.js"></script>
+<div class="main-content clearfix">
+    <div class="post-lists">
+        <p class=""><a style="float:right;" href="/admin/add">添加</a> </p>
+        <table style="display:inline-table;">
+            <thead>
+                <tr>
+                    <td width="20"> ID </td>
+                    <td> 标题 </td>
+                    <td width="150"> 发布时间 </td>
+                    <td width="150"> 最近修改时间 </td>
+                    <td width="50"> 状态 </td>
+                    <td width="50"> 操作 </td>
+                </tr>
+            </thead>
+            {foreach $data(key,value)}
+            <tr>
+                <td> {@value.id} </td>
+                <td> {@value.title} </td>
+                <td> {@value.create_time} </td>
+                <td> {@value.update_time} </td>
+                <td><a class="state" id="state{@value.id}" data-id="{@value.id}" href="javascript:void(0);"><?php echo $value['status']?'显示':'隐藏';?></a> </td>
+                <td><a href="/admin/{@value.id}/edit">修改</a> </td>
+            </tr>
+            {/foreach}
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $("a.state").click(function () {
+            var id = $(this).data('id');
+            $.ajax({
+                type: 'get',
+                url: '/admin/'+id+'/state',
+                success: function(data){
+                    if(data.status){
+                        $.diy_alert({"cont":data.info});
+                        $('#state'+data.status).text(data.info);
+                    }else{
+                        $('#state'+data.status).text(data.info);
+                        $.diy_alert({"cont":data.info});
+                    }
+                }
+            });
+            return false;
+        });
+    })
+</script>
+
