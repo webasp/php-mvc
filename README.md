@@ -2,7 +2,6 @@
 
 >  简单的PHP框架   MVC框架入门实例  仅用于学习理解MVC结构
 
-[GitHub下载](https://github.com/webasp/php)
 
 ## 目录结构
 
