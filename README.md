@@ -99,7 +99,7 @@ class IndexController  extends Controller
 > 2. display() 方法
 > 3. json() 方法
 
-**assign('名称',变量名称) **
+** assign('名称',变量名称) **
 > 向模板中注入数据
 
 
@@ -108,12 +108,14 @@ class IndexController  extends Controller
 $this->assign('data',$article);
 ```
 
-**display('视图文件名'[,变量名称(['page'=>1])[,teue|false]]) **
+** display('视图文件名'[,变量名称(['page'=>1])[,teue|false]]) **
 >  载入视图文件
-
+参数1. 视图文件路径  
+参数2. 分页信息
+参数3. 是否生成编译文件
 ```
 // 格式：
-   $this->display('index');
+   $this->display('Home/index');
 ```
  **json() 方法**
 > 转成json 格式输出
